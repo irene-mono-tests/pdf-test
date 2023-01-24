@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import prntr from "prntr";
 import { pdfTypes } from "./pdfTypes";
 
@@ -14,8 +14,19 @@ interface Props {
   docData?: any;
 }
 
+const isFireFox = () => {
+  if (typeof navigator !== "undefined") {
+    return navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
+  }
+
+  return false;
+};
+
+const fiveMins = 1000 * 5;
+
 const usePrint = () => {
   const [status, setStatus] = useState(print_status.idle);
+  const ref = useRef<{ id: string; time: string }[]>([]);
 
   const print = ({ type, docData }: Props) => {
     setStatus(print_status.pending);
@@ -42,6 +53,32 @@ const usePrint = () => {
     worker.postMessage({ type, docData });
   };
 
+  useEffect(() => {
+    if (document && window) {
+      const removeFrames = () => {
+        const now = new Date().getTime();
+        ref.current.forEach((frame) => {
+          if (now - new Date(frame.time).getTime() >= fiveMins) {
+            const node = document.querySelector(
+              `[data-id="${frame.id}"]`
+            ) as Node;
+
+            if (node) {
+              document.body.removeChild(node);
+            }
+          }
+        });
+      };
+
+      const timerId = setInterval(() => {
+        removeFrames();
+      }, fiveMins);
+
+      return () => clearInterval(timerId);
+    }
+  }, []);
+
+  //many browser issues
   const iframePrint = ({ type, docData }: Props) => {
     if (typeof document !== "undefined") {
       setStatus(print_status.pending);
@@ -62,18 +99,29 @@ const usePrint = () => {
 
         hiddenFrame.src = URL.createObjectURL(e.data);
 
+        if (isFireFox()) {
+          hiddenFrame.setAttribute("data-id", new Date().toISOString());
+          ref.current.push({
+            id: new Date().toISOString(),
+            time: new Date().toISOString(),
+          });
+        }
+
         hiddenFrame.onload = () => {
           const contentWindow = hiddenFrame.contentWindow;
 
           if (contentWindow) {
-            contentWindow.onbeforeunload = () => {
-              document.body.removeChild(hiddenFrame);
-            };
+            if (!isFireFox()) {
+              // these two will break in mozilla
+              contentWindow.onbeforeunload = () => {
+                document.body.removeChild(hiddenFrame);
+              };
 
-            contentWindow.onafterprint = () => {
-              hiddenFrame.src = "";
-              document.body.removeChild(hiddenFrame);
-            };
+              contentWindow.onafterprint = () => {
+                hiddenFrame.src = "";
+                document.body.removeChild(hiddenFrame);
+              };
+            }
 
             contentWindow.focus();
 
@@ -97,6 +145,9 @@ const usePrint = () => {
 
   const printOrDownloadBasedOnScreen = ({ type, docData }: Props) => {
     if (typeof document !== "undefined" && typeof window !== "undefined") {
+      //download as pdf instead of directly printing on smaller devices
+      //to solve some issues on some mobile browsers as well as firefox
+      //cors issue
       if (window.innerWidth < 768) {
         setStatus(print_status.pending);
 
@@ -123,7 +174,7 @@ const usePrint = () => {
 
         worker.postMessage({ type, docData });
       } else {
-        iframePrint({ type, docData });
+        print({ type, docData });
       }
     }
   };

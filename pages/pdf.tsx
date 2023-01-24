@@ -27,6 +27,12 @@ const IframePrint = () => {
   return (
     <article>
       <h3>With Images (Iframe)</h3>
+      <p>
+        Breaks on mozilla due to security stuff, use printr or comment out{" "}
+        <code>.onafterprint</code> and <code>.onbeforeunload</code>{" "}
+      </p>
+
+      <p>Consider set timeout to clear stale iframe references</p>
       <button onClick={() => print({ type: pdfTypes.image })}>
         {status === print_status.pending ? "Generating..." : "Print"}
       </button>
@@ -39,7 +45,8 @@ const PrintBasedOnOs = () => {
 
   return (
     <article>
-      <h3>With Images (Iframe+ mobile hack?)</h3>
+      <h3>With Images (mobile hack?)</h3>
+
       <button onClick={() => print({ type: pdfTypes.image })}>
         {status === print_status.pending ? "Generating..." : "Print"}
       </button>
