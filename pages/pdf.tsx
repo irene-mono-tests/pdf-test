@@ -65,7 +65,7 @@ const LongTable = () => {
 
   return (
     <article>
-      <h3>Long Table Pdf - custom font</h3>
+      <h3>Long Table Pdf - custom font and page numbers</h3>
       <button onClick={() => print({ type: pdfTypes.table })}>
         {status === print_status.pending ? "Generating..." : "Print"}
       </button>
