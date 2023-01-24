@@ -33,6 +33,8 @@ const IframePrint = () => {
       </p>
 
       <p>Consider set timeout to clear stale iframe references</p>
+
+      <p>Still weird in mobile</p>
       <button onClick={() => print({ type: pdfTypes.image })}>
         {status === print_status.pending ? "Generating..." : "Print"}
       </button>

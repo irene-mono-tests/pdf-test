@@ -22,7 +22,7 @@ const isFireFox = () => {
   return false;
 };
 
-const fiveMins = 1000 * 5;
+const fiveMins = 1000 * 60 * 5;
 
 const usePrint = () => {
   const [status, setStatus] = useState(print_status.idle);
