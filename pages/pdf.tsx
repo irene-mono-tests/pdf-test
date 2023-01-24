@@ -47,6 +47,32 @@ const PrintBasedOnOs = () => {
   );
 };
 
+const LongPdfFixedImage = () => {
+  const { printOrDownloadBasedOnScreen: print, status } = usePrint();
+
+  return (
+    <article>
+      <h3>Long Pdf with fixed image on each page</h3>
+      <button onClick={() => print({ type: pdfTypes.long })}>
+        {status === print_status.pending ? "Generating..." : "Print"}
+      </button>
+    </article>
+  );
+};
+
+const LongTable = () => {
+  const { printOrDownloadBasedOnScreen: print, status } = usePrint();
+
+  return (
+    <article>
+      <h3>Long Table Pdf - custom font</h3>
+      <button onClick={() => print({ type: pdfTypes.table })}>
+        {status === print_status.pending ? "Generating..." : "Print"}
+      </button>
+    </article>
+  );
+};
+
 const Pdf = () => {
   const { print, status } = usePrint();
 
@@ -74,6 +100,10 @@ const Pdf = () => {
       <IframePrint />
 
       <PrintBasedOnOs />
+
+      <LongPdfFixedImage />
+
+      <LongTable />
     </div>
   );
 };

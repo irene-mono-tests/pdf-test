@@ -30,6 +30,8 @@ const usePrint = () => {
         printable: URL.createObjectURL(e.data),
         type: "pdf",
       });
+
+      worker.terminate();
     };
 
     worker.onerror = (e) => {
@@ -69,12 +71,15 @@ const usePrint = () => {
             };
 
             contentWindow.onafterprint = () => {
+              hiddenFrame.src = "";
               document.body.removeChild(hiddenFrame);
             };
 
             contentWindow.focus();
 
             contentWindow.print();
+
+            worker.terminate();
           }
         };
 
@@ -113,6 +118,7 @@ const usePrint = () => {
 
           // Clean up and remove the link
           link.parentNode?.removeChild(link);
+          worker.terminate();
         };
 
         worker.postMessage({ type, docData });
