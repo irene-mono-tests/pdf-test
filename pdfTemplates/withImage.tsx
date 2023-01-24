@@ -12,9 +12,9 @@ import {
 
 const withImage = () => {
   return (
-    <Document>
+    <Document title="My-image-pdf">
       <Page
-        style={{ paddingHorizontal: 40, paddingTop: 40, paddingBottom: "10mm" }}
+        style={{ paddingHorizontal: 40, paddingTop: 40, paddingBottom: 80 }}
       >
         <Text>Image Pdf</Text>
 

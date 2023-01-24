@@ -40,7 +40,57 @@ const usePrint = () => {
     worker.postMessage({ type, docData });
   };
 
-  return { print, status };
+  const iframePrint = ({ type, docData }: Props) => {
+    if (typeof document !== "undefined") {
+      setStatus(print_status.pending);
+
+      const worker = new Worker(new URL("./pdfWorker.tsx", import.meta.url));
+
+      worker.onmessage = (e) => {
+        setStatus(print_status.success);
+
+        const hiddenFrame = document.createElement("iframe");
+
+        hiddenFrame.style.position = "fixed";
+        hiddenFrame.style.right = "0";
+        hiddenFrame.style.bottom = "0";
+        hiddenFrame.style.width = "0";
+        hiddenFrame.style.height = "0";
+        hiddenFrame.style.border = "0";
+
+        hiddenFrame.src = URL.createObjectURL(e.data);
+
+        hiddenFrame.onload = () => {
+          const contentWindow = hiddenFrame.contentWindow;
+
+          if (contentWindow) {
+            contentWindow.onbeforeunload = () => {
+              document.body.removeChild(hiddenFrame);
+            };
+
+            contentWindow.onafterprint = () => {
+              document.body.removeChild(hiddenFrame);
+            };
+
+            contentWindow.focus();
+
+            contentWindow.print();
+          }
+        };
+
+        document.body.appendChild(hiddenFrame);
+      };
+
+      worker.onerror = (e) => {
+        setStatus(print_status.error);
+        console.error(e);
+      };
+
+      worker.postMessage({ type, docData });
+    }
+  };
+
+  return { print, status, iframePrint };
 };
 
 export default usePrint;

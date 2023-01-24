@@ -21,6 +21,19 @@ const ImageSec = () => {
   );
 };
 
+const IframePrint = () => {
+  const { iframePrint: print, status } = usePrint();
+
+  return (
+    <article>
+      <h3>With Images (Iframe)</h3>
+      <button onClick={() => print({ type: pdfTypes.image })}>
+        {status === print_status.pending ? "Generating..." : "Print"}
+      </button>
+    </article>
+  );
+};
+
 const Pdf = () => {
   const { print, status } = usePrint();
 
@@ -44,6 +57,8 @@ const Pdf = () => {
       </article>
 
       <ImageSec />
+
+      <IframePrint />
     </div>
   );
 };

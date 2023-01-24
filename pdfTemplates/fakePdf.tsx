@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 
 // Create Document Component
 const MyDocument = ({ value }: { value: number }) => (
-  <Document>
+  <Document title="My pdf">
     <Page size="C6" style={styles.page} orientation="landscape">
       <View style={styles.section}>
         <Text>Section #1</Text>
