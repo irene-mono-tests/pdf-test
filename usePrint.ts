@@ -90,7 +90,44 @@ const usePrint = () => {
     }
   };
 
-  return { print, status, iframePrint };
+  const printOrDownloadBasedOnScreen = ({ type, docData }: Props) => {
+    if (typeof document !== "undefined" && typeof window !== "undefined") {
+      if (window.innerWidth < 768) {
+        console.log(90);
+
+        setStatus(print_status.pending);
+
+        const worker = new Worker(new URL("./pdfWorker.tsx", import.meta.url));
+
+        worker.onmessage = (e) => {
+          const link = document.createElement("a");
+
+          console.log(900);
+          console.log(link);
+
+          link.href = URL.createObjectURL(e.data);
+          link.setAttribute("download", `FileName.pdf`);
+
+          // Append to html link element page
+          document.body.appendChild(link);
+
+          // Start download
+          link.click();
+
+          setStatus(print_status.success);
+
+          // Clean up and remove the link
+          link.parentNode?.removeChild(link);
+        };
+
+        worker.postMessage({ type, docData });
+      } else {
+        iframePrint({ type, docData });
+      }
+    }
+  };
+
+  return { print, status, iframePrint, printOrDownloadBasedOnScreen };
 };
 
 export default usePrint;

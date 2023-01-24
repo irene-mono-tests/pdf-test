@@ -34,11 +34,24 @@ const IframePrint = () => {
   );
 };
 
+const PrintBasedOnOs = () => {
+  const { printOrDownloadBasedOnScreen: print, status } = usePrint();
+
+  return (
+    <article>
+      <h3>With Images (Iframe+ mobile hack?)</h3>
+      <button onClick={() => print({ type: pdfTypes.image })}>
+        {status === print_status.pending ? "Generating..." : "Print"}
+      </button>
+    </article>
+  );
+};
+
 const Pdf = () => {
   const { print, status } = usePrint();
 
   return (
-    <div className="grid gap-2 grid-cols-2 min-h-screen place-content-center content-center ">
+    <div className="grid gap-2 grid-cols-2 min-h-screen place-content-center content-center p-3 ">
       <article>
         <h3>Base example</h3>
 
@@ -59,6 +72,8 @@ const Pdf = () => {
       <ImageSec />
 
       <IframePrint />
+
+      <PrintBasedOnOs />
     </div>
   );
 };
