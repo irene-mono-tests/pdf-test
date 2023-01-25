@@ -14,7 +14,10 @@ const ImageSec = () => {
   return (
     <article>
       <h3>With Images</h3>
-      <button onClick={() => print({ type: pdfTypes.image })}>
+      <button
+        className=" bg-green-600 px-5 text-white p-1 inline-block my-2 rounded-sm"
+        onClick={() => print({ type: pdfTypes.image })}
+      >
         {status === print_status.pending ? "Generating..." : "Print"}
       </button>
     </article>
@@ -34,8 +37,11 @@ const IframePrint = () => {
 
       <p>Consider set timeout to clear stale iframe references</p>
 
-      <p>Still weird in mobile</p>
-      <button onClick={() => print({ type: pdfTypes.image })}>
+      <p>Still weird on mobile</p>
+      <button
+        className=" bg-green-600 px-5 text-white p-1 inline-block my-2 rounded-sm"
+        onClick={() => print({ type: pdfTypes.image })}
+      >
         {status === print_status.pending ? "Generating..." : "Print"}
       </button>
     </article>
@@ -49,7 +55,12 @@ const PrintBasedOnOs = () => {
     <article>
       <h3>With Images (mobile hack?)</h3>
 
-      <button onClick={() => print({ type: pdfTypes.image })}>
+      <p>Mobile hack is just downloading as pdf and not printing</p>
+
+      <button
+        className=" bg-green-600 px-5 text-white p-1 inline-block my-2 rounded-sm"
+        onClick={() => print({ type: pdfTypes.image })}
+      >
         {status === print_status.pending ? "Generating..." : "Print"}
       </button>
     </article>
@@ -62,7 +73,10 @@ const LongPdfFixedImage = () => {
   return (
     <article>
       <h3>Long Pdf with fixed image on each page</h3>
-      <button onClick={() => print({ type: pdfTypes.long })}>
+      <button
+        className=" bg-green-600 px-5 text-white p-1 inline-block my-2 rounded-sm"
+        onClick={() => print({ type: pdfTypes.long })}
+      >
         {status === print_status.pending ? "Generating..." : "Print"}
       </button>
     </article>
@@ -74,8 +88,15 @@ const LongTable = () => {
 
   return (
     <article>
-      <h3>Long Table Pdf - custom font and page numbers</h3>
-      <button onClick={() => print({ type: pdfTypes.table })}>
+      <h3>Long Table Pdf - custom local font and page numbers</h3>
+
+      <p>
+        Remote fonts will <strong>not</strong> work
+      </p>
+      <button
+        className=" bg-green-600 px-5 text-white p-1 inline-block my-2 rounded-sm"
+        onClick={() => print({ type: pdfTypes.table })}
+      >
         {status === print_status.pending ? "Generating..." : "Print"}
       </button>
     </article>
@@ -86,7 +107,7 @@ const Pdf = () => {
   const { print, status } = usePrint();
 
   return (
-    <div className="grid gap-2 grid-cols-2 min-h-screen place-content-center content-center p-3 ">
+    <div className="grid gap-1  my-2 grid-cols-2 min-h-screen place-content-center content-center p-3 ">
       <article>
         <h3>Base example</h3>
 
@@ -113,6 +134,10 @@ const Pdf = () => {
       <LongPdfFixedImage />
 
       <LongTable />
+
+      <article>
+        <h3>Nothing to see here</h3>
+      </article>
     </div>
   );
 };

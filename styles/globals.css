@@ -103,3 +103,17 @@ a {
     color-scheme: dark;
   }
 }
+
+@layer base
+{
+   h3 
+  {
+    @apply text-xl font-bold md:text-2xl 
+  }
+
+  h4 
+  {
+    @apply text-lg font-semibold md:text-xl 
+  }
+
+}

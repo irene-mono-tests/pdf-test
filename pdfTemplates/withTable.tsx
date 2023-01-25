@@ -1,8 +1,6 @@
 import { Page, Text, View, Document, Font } from "@react-pdf/renderer";
 import { Fragment } from "react";
 
-//
-
 Font.register({
   family: "Pacifico",
   src: "/Pacifico-Regular.ttf",
@@ -66,7 +64,12 @@ const withTable = () => {
                   border: 1,
                 }}
               >
-                <View style={{ flexGrow: 1, fontFamily: "Pacifico" }}>
+                <View
+                  style={{
+                    flexGrow: 1,
+                    fontFamily: "Pacifico",
+                  }}
+                >
                   <Text>{r.col1}</Text>
                 </View>
 
